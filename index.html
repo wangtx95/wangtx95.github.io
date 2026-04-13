@@ -1,1 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From 10 to 1000 · Aurelian · Ziyi Wang</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0e0e0c;--bg-card:#161614;--bg-raised:#1c1c19;
+  --text-primary:#f0ede6;--text-secondary:#c8c4bb;--text-muted:#7a7770;
+  --border:rgba(240,237,230,0.08);--border-mid:rgba(240,237,230,0.14);
+  --gold:#b8a98a;
+  --font-serif:'Playfair Display',serif;--font-sans:'Syne',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text-primary);line-height:1.6;}
+.page{max-width:780px;margin:0 auto;padding:6rem 2rem 6rem;}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.5rem;}
+.hero-title{font-family:var(--font-serif);font-size:52px;font-weight:400;line-height:1.1;letter-spacing:-.5px;color:var(--text-primary);margin-bottom:2rem;}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-body{font-size:15px;color:var(--text-secondary);line-height:1.8;margin-bottom:1.25rem;max-width:620px;}
+.author-row{display:flex;align-items:center;gap:12px;padding:1.25rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:2rem 0 3.5rem;}
+.avatar{width:36px;height:36px;border-radius:50%;border:1px solid var(--border-mid);background:var(--bg-raised);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--text-muted);flex-shrink:0;}
+.author-meta{font-size:12px;color:var(--text-muted);}
+.author-meta strong{color:var(--text-primary);font-weight:500;}
+.toc{border:1px solid var(--border);padding:1.5rem;margin-bottom:4rem;}
+.toc-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);margin-bottom:1rem;}
+.toc-item{display:flex;align-items:center;gap:12px;padding:7px 0;font-size:13px;border-bottom:1px solid var(--border);}
+.toc-item:last-child{border-bottom:none;}
+.toc-num{font-size:10px;color:var(--text-muted);min-width:20px;}
+.toc-text{color:var(--text-secondary);flex:1;}
+.toc-tag{font-size:10px;padding:2px 8px;border:1px solid var(--border-mid);color:var(--text-muted);white-space:nowrap;}
+.section{margin-bottom:5rem;}
+.section-badge{display:inline-block;font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem;}
+.section-title{font-family:var(--font-serif);font-size:32px;font-weight:400;line-height:1.2;color:var(--text-primary);margin-bottom:.5rem;}
+.section-sub{font-size:13px;color:var(--text-muted);margin-bottom:2rem;}
+.body-text{font-size:15px;color:var(--text-secondary);line-height:1.8;margin-bottom:1.5rem;}
+.stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:2rem 0;background:var(--border);border:1px solid var(--border);}
+.stat-card{background:var(--bg-card);padding:1.25rem;}
+.stat-num{font-family:var(--font-serif);font-size:28px;font-weight:400;color:var(--text-primary);margin-bottom:4px;}
+.stat-label{font-size:11px;color:var(--text-muted);line-height:1.5;}
+.insight-box{border-left:1px solid var(--gold);padding:1rem 1.5rem;margin:2rem 0;background:rgba(184,169,138,.04);}
+.insight-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:6px;}
+.insight-text{font-size:14px;color:var(--text-secondary);line-height:1.7;}
+.divider{border:none;border-top:1px solid var(--border);margin:4rem 0;}
+/* CFB */
+.cfb{border:1px solid var(--border);background:var(--bg-card);margin-top:2rem;}
+.cfb-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cfb-title{font-size:12px;font-weight:500;color:var(--text-primary);letter-spacing:.04em;}
+.cfb-subtitle{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.proto-badge{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border);padding:3px 8px;}
+.cfb-body{padding:1.5rem;}
+.cfb-step{margin-bottom:1.5rem;}
+.step-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:.75rem;display:flex;align-items:center;gap:8px;}
+.step-num{width:18px;height:18px;border:1px solid var(--border-mid);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text-muted);flex-shrink:0;}
+.call-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{font-size:11px;padding:5px 12px;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;background:transparent;transition:all .15s;letter-spacing:.03em;font-family:var(--font-sans);}
+.chip:hover{border-color:var(--border-mid);color:var(--text-secondary);}
+.chip.active{border-color:var(--gold);color:var(--gold);background:rgba(184,169,138,.06);}
+.chip-add{font-size:11px;padding:5px 12px;border:1px dashed rgba(240,237,230,.15);color:var(--text-muted);cursor:pointer;background:transparent;font-family:var(--font-sans);}
+.conn{width:1px;height:16px;background:var(--border);margin:4px 0 4px 8px;}
+.sop-block{background:var(--bg);border:1px solid var(--border);}
+.sop-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);}
+.sop-row:last-child{border-bottom:none;}
+.sop-text{font-size:13px;color:var(--text-secondary);flex:1;line-height:1.4;}
+.badge-req{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(184,169,138,.3);padding:2px 6px;white-space:nowrap;}
+.badge-opt{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border);padding:2px 6px;white-space:nowrap;}
+.redirect-rows{display:flex;flex-direction:column;gap:8px;}
+.redir-row{display:flex;align-items:center;gap:12px;}
+.redir-label{font-size:12px;color:var(--text-muted);min-width:130px;}
+.redir-select{flex:1;font-size:12px;padding:8px 10px;border:1px solid var(--border);background:var(--bg);color:var(--text-secondary);outline:none;font-family:var(--font-sans);}
+.redir-select:focus{border-color:var(--border-mid);}
+.cfb-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);}
+.footer-note{font-size:11px;color:var(--text-muted);}
+.save-btn{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:8px 18px;border:1px solid var(--border-mid);color:var(--text-secondary);background:transparent;cursor:pointer;font-family:var(--font-sans);transition:all .15s;}
+.save-btn:hover{border-color:var(--gold);color:var(--gold);}
+/* CAD */
+.cad-chart{border:1px solid var(--border);background:var(--bg-card);margin:2rem 0;}
+.cad-chart-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);}
+.cad-chart-title{font-size:12px;font-weight:500;color:var(--text-primary);}
+.cad-chart-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.cad-chart-body{padding:1.5rem;}
+.cad-row{margin-bottom:1.25rem;}
+.cad-row:last-child{margin-bottom:0;}
+.cad-meta{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:7px;}
+.cad-vendor{font-size:13px;color:var(--text-secondary);}
+.cad-detail{font-size:11px;color:var(--text-muted);}
+.cad-bar-wrap{height:3px;background:rgba(240,237,230,.06);}
+.cad-bar{height:100%;transition:width .7s ease;}
+.bar-cs{background:var(--gold);}
+.bar-hex{background:rgba(184,169,138,.6);}
+.bar-mot{background:rgba(184,169,138,.4);}
+.bar-tyl{background:rgba(184,169,138,.25);}
+.bar-oth{background:rgba(240,237,230,.1);}
+.cad-tag{display:inline-block;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;margin-left:8px;vertical-align:middle;}
+.cad-tag-live{border:1px solid rgba(184,169,138,.4);color:var(--gold);}
+.cad-tag-pri{border:1px solid var(--border-mid);color:var(--text-muted);}
+.cad-legend{display:flex;gap:16px;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);}
+.legend-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+/* strategy */
+.strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin:2rem 0;background:var(--border);border:1px solid var(--border);}
+.strategy-card{background:var(--bg-card);padding:1.25rem;}
+.strategy-card.primary{background:rgba(184,169,138,.04);}
+.strat-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
+.strat-label.a{color:var(--gold);}
+.strat-label.b{color:var(--text-muted);}
+.strat-title{font-family:var(--font-serif);font-size:16px;font-weight:400;color:var(--text-primary);margin-bottom:8px;line-height:1.3;}
+.strat-desc{font-size:13px;color:var(--text-secondary);line-height:1.65;}
+.strat-when{font-size:11px;color:var(--text-muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+/* journey */
+.journey-wrap{border:1px solid var(--border);background:var(--bg-card);margin:2rem 0;}
+.journey-title{font-size:12px;font-weight:500;color:var(--text-primary);padding:1rem 1.5rem .25rem;}
+.journey-sub{font-size:11px;color:var(--text-muted);padding:0 1.5rem 1rem;border-bottom:1px solid var(--border);}
+.journey-nodes{display:flex;align-items:center;gap:2px;padding:1.25rem 1.5rem;flex-wrap:wrap;}
+.jnode{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:10px 8px;border:1px solid transparent;transition:all .12s;min-width:80px;}
+.jnode:hover{border-color:var(--border);}
+.jnode.active{border-color:var(--border-mid);background:rgba(240,237,230,.03);}
+.jnode-icon{width:34px;height:34px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--text-muted);}
+.jnode-label{font-size:10px;color:var(--text-secondary);text-align:center;}
+.jnode-role{font-size:9px;color:var(--text-muted);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.jnode-arrow{font-size:12px;color:var(--border-mid);margin-top:-14px;}
+.jdetail{margin:0 1.5rem 1.5rem;border:1px solid var(--border);padding:1.25rem;min-height:100px;background:var(--bg);}
+.jd-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.jd-name{font-family:var(--font-serif);font-size:15px;color:var(--text-primary);}
+.jd-tag{font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--border-mid);color:var(--text-muted);}
+.jd-concern-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:5px;}
+.jd-concern{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:12px;}
+.jd-artifact-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:5px;}
+.jd-artifact{font-size:13px;color:var(--text-secondary);line-height:1.6;}
+/* p4 */
+.p4-grid{display:flex;flex-direction:column;gap:1px;margin:2rem 0;background:var(--border);border:1px solid var(--border);}
+.p4-card{background:var(--bg-card);padding:1.25rem 1.5rem;}
+.p4-card-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:6px;}
+.p4-card-title{font-family:var(--font-serif);font-size:16px;font-weight:400;color:var(--text-primary);margin-bottom:8px;}
+.p4-card-body{font-size:13px;color:var(--text-secondary);line-height:1.65;}
+.p4-footer{margin-top:2.5rem;padding:1.5rem;border:1px solid var(--border);}
+.p4-footer-text{font-family:var(--font-serif);font-size:18px;font-weight:400;color:var(--text-primary);line-height:1.5;font-style:italic;}
+.breadcrumb{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;display:inline-block;margin-bottom:1.5rem;transition:color .2s;}
+.breadcrumb:hover{color:var(--text-primary);}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:2rem;}
+.tag{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border-mid);color:var(--text-muted);}
+.tech-line{font-size:12px;color:var(--text-muted);margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);}
+.site-footer{border-top:1px solid var(--border);margin-top:6rem;padding:2.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:780px;margin-left:auto;margin-right:auto;}
+.footer-name{font-size:13px;color:var(--text-muted);}
+.footer-name strong{color:var(--text-secondary);font-weight:500;}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-links a{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--text-primary);}
+</style>
+</head>
+<body>
+<div class="page">
+  <a href="https://karenw9571.github.io/index.html" class="breadcrumb">← All case studies</a>
+  <div class="tags">
+    <span class="tag">Product strategy</span>
+    <span class="tag">AI/ML</span>
+    <span class="tag">Public safety</span>
+    <span class="tag">Case study</span>
+  </div>
+  <p class="eyebrow">Product perspective · Aurelian · April 2026</p>
+  <h1 class="hero-title">From 10 to 1000:<br>What product can do to<br>help <em>Aurelian</em> get there</h1>
+  <p class="hero-body">I spent time researching Aurelian before writing this. What I found is a genuinely strong product — technically sound, clearly differentiated, and solving a real crisis that isn't going away. 74% automation rates, sub-six-week deployments, live across five states. The team has built something hard: an AI product that works in a high-stakes, low-trust environment, and gotten government customers to adopt it. That's not easy, and it's not common.</p>
+  <p class="hero-body">The question I kept coming back to isn't whether the product works. It's whether the current product form can support what comes next. Proven viability is one thing — scalability is another. That gap is exactly where a PM adds the most value right now.</p>
+  <p class="hero-body">Below are three observations from a product lens: what I see as the opportunities, what product can directly own, and where product supports other functions without overstepping. These are starting points for a conversation — I'd genuinely like to hear where your thinking differs.</p>
+  <div class="author-row">
+    <div class="avatar">ZY</div>
+    <div class="author-meta"><strong>Ziyi Wang</strong> &nbsp;·&nbsp; PM, AI/ML products &nbsp;·&nbsp; zwang9571@gmail.com</div>
+  </div>
+  <div class="toc">
+    <p class="toc-label">Contents</p>
+    <div class="toc-item"><span class="toc-num">01</span><span class="toc-text">The deployment process is a product problem in disguise</span><span class="toc-tag">10 → 100</span></div>
+    <div class="toc-item"><span class="toc-num">02</span><span class="toc-text">CAD integration: from recurring cost to one-time investment</span><span class="toc-tag">100 → 1000</span></div>
+    <div class="toc-item"><span class="toc-num">03</span><span class="toc-text">The procurement problem: where product supports sales</span><span class="toc-tag">1000 → scale</span></div>
+    <div class="toc-item"><span class="toc-num">04</span><span class="toc-text">If I were the first PM: how I'd think about sequencing</span><span class="toc-tag">judgment</span></div>
+  </div>
+  <!-- PART 1 -->
+  <div class="section">
+    <p class="section-badge">Product opportunity 01 · 10 → 100</p>
+    <h2 class="section-title">The deployment process is a product problem in disguise</h2>
+    <p class="section-sub">What looks like an ops bottleneck is actually a missing product surface</p>
+    <p class="body-text">When I looked at how Aurelian deploys today, my first reaction was: this is a strong team executing well under constraints. Sub-six-week deployments in a government context is genuinely impressive. But when I looked at what's inside those six weeks — the meetings, the manual SOP mapping, the hand-built logic trees — I saw something a PM should flag: work that belongs in the product, not in the deployment process.</p>
+    <p class="body-text">Right now, every new ECC requires Aurelian's team to meet with law enforcement, fire, and EMS separately, map call types by hand, build redirect logic from scratch, and load local GIS data manually. It works. But it doesn't compound — the 50th customer takes the same effort as the 5th. That's the signal that something which should be a product feature is currently being handled by people.</p>
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-num">&lt;6 wks</div><div class="stat-label">Average deployment today — entirely white-glove</div></div>
+      <div class="stat-card"><div class="stat-num">74%</div><div class="stat-label">Average call automation rate across live deployments</div></div>
+      <div class="stat-card"><div class="stat-num">5,748</div><div class="stat-label">PSAPs in the US — the full addressable market</div></div>
+    </div>
+    <p class="body-text">The key insight is that the customization isn't actually that custom. Across every deployed ECC, variation follows a predictable pattern: different call type labels, different question sequences, different redirect targets — but the underlying structure is identical. Every call flow is a trigger, a set of questions, and an outcome. The content varies. The shape doesn't.</p>
+    <div class="insight-box">
+      <p class="insight-label">Product observation</p>
+      <p class="insight-text">The bottleneck isn't complexity — it's that Aurelian is manually doing work that customers could do themselves, if given the right tool. A self-serve Call Flow Builder turns a 4-week configuration sprint into a 2-hour onboarding session. This is the difference between a deployment motion that scales and one that doesn't.</p>
+    </div>
+    <p class="body-text">To be clear about what product can and can't own here: model fine-tuning on local call history, CAD integration, and accent-specific transcription still require engineering involvement. But SOP configuration and redirect routing are product surfaces. The institutional knowledge that today lives in an Aurelian engineer's notebook can become a template library any ECC admin navigates on their own.</p>
+    <p class="body-text">Below is a prototype of what that tool could look like — not a polished spec, but a thinking tool to make the argument concrete.</p>
+    <div class="cfb">
+      <div class="cfb-header">
+        <div><p class="cfb-title">Call Flow Builder</p><p class="cfb-subtitle">Configure how Ava handles each non-emergency call type</p></div>
+        <span class="proto-badge">prototype</span>
+      </div>
+      <div class="cfb-body">
+        <div class="cfb-step">
+          <p class="step-label"><span class="step-num">1</span> Select call type</p>
+          <div class="call-chips">
+            <div class="chip active" onclick="selectCallType(this,'noise')">Noise complaint</div>
+            <div class="chip" onclick="selectCallType(this,'parking')">Parking violation</div>
+            <div class="chip" onclick="selectCallType(this,'animal')">Lost animal</div>
+            <div class="chip" onclick="selectCallType(this,'welfare')">Welfare check</div>
+            <div class="chip" onclick="selectCallType(this,'info')">General inquiry</div>
+            <div class="chip-add">+ Add type</div>
+          </div>
+        </div>
+        <div class="conn"></div>
+        <div class="cfb-step">
+          <p class="step-label"><span class="step-num">2</span> SOP — questions Ava will ask</p>
+          <div class="sop-block" id="sopBlock"></div>
+        </div>
+        <div class="conn"></div>
+        <div class="cfb-step">
+          <p class="step-label"><span class="step-num">3</span> Redirect — where does this call go?</p>
+          <div class="redirect-rows" id="redirBlock"></div>
+        </div>
+      </div>
+      <div class="cfb-footer">
+        <p class="footer-note" id="footerNote">Noise complaint · 4 questions · routes to patrol CAD</p>
+        <button class="save-btn">Save flow</button>
+      </div>
+    </div>
+  </div>
+  <hr class="divider">
+  <!-- PART 2 -->
+  <div class="section">
+    <p class="section-badge">Product opportunity 02 · 100 → 1000</p>
+    <h2 class="section-title">CAD integration: from recurring cost to one-time investment</h2>
+    <p class="section-sub">Product can't negotiate the partnership — but it can build the foundation that makes it tractable</p>
+    <p class="body-text">This one sits at the boundary of what product owns. The strategic decision — whether to pursue certified partnerships with CAD vendors or channel distribution deals — belongs to the founders and BD. But how Aurelian's integration layer is architected is a product decision, and it has direct consequences for how tractable those conversations become.</p>
+    <p class="body-text">Right now, every time Aurelian encounters a CAD system it hasn't integrated before, an engineer builds the connection from scratch. There are approximately 5,748 PSAPs in the US, concentrated across four major vendors. Aurelian has integrated CentralSquare — confirmed in the Hamilton County deployment. But each new platform is a fresh engineering project. If the integration layer is built with clean interfaces and standardized data handoffs, the cost per new platform drops significantly, and the case for vendor partnership becomes much easier to make.</p>
+    <div class="cad-chart">
+      <div class="cad-chart-header"><p class="cad-chart-title">CAD market coverage · US PSAPs</p><p class="cad-chart-sub">Estimated share of ~5,748 PSAPs by vendor · integration priority for Aurelian</p></div>
+      <div class="cad-chart-body">
+        <div class="cad-row"><div class="cad-meta"><span class="cad-vendor">CentralSquare <span class="cad-tag cad-tag-live">integrated</span></span><span class="cad-detail">~25% of all 911 calls · 8,000+ agencies</span></div><div class="cad-bar-wrap"><div class="cad-bar bar-cs" style="width:52%"></div></div></div>
+        <div class="cad-row"><div class="cad-meta"><span class="cad-vendor">Hexagon Safety <span class="cad-tag cad-tag-pri">priority 1</span></span><span class="cad-detail">Largest global installed base · dominant in Tier 1 metros</span></div><div class="cad-bar-wrap"><div class="cad-bar bar-hex" style="width:22%"></div></div></div>
+        <div class="cad-row"><div class="cad-meta"><span class="cad-vendor">Motorola Solutions <span class="cad-tag cad-tag-pri">priority 2</span></span><span class="cad-detail">1,600+ PSAPs via RapidDeploy · fast-growing via acquisitions</span></div><div class="cad-bar-wrap"><div class="cad-bar bar-mot" style="width:16%"></div></div></div>
+        <div class="cad-row"><div class="cad-meta"><span class="cad-vendor">Tyler Technologies</span><span class="cad-detail">~10.7% public safety software market · strong in mid-large agencies</span></div><div class="cad-bar-wrap"><div class="cad-bar bar-tyl" style="width:10%"></div></div></div>
+        <div class="cad-row"><div class="cad-meta"><span class="cad-vendor">Others</span><span class="cad-detail">Mark43, Carbyne, legacy on-prem, custom systems</span></div><div class="cad-bar-wrap"><div class="cad-bar bar-oth" style="width:8%"></div></div></div>
+        <div class="cad-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>CentralSquare</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(184,169,138,.6)"></div>Hexagon</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(184,169,138,.4)"></div>Motorola</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(184,169,138,.25)"></div>Tyler</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(240,237,230,.1)"></div>Others</div>
+        </div>
+      </div>
+    </div>
+    <p class="body-text">Integrating CentralSquare and Hexagon alone covers the majority of the addressable market. Every subsequent customer running either platform is a near-zero marginal integration cost. That's the moat — not the technology itself, but the compounding advantage of having done the integration work once, deeply, at the certification level.</p>
+    <div class="insight-box">
+      <p class="insight-label">Product observation</p>
+      <p class="insight-text">Product's role here is to build an integration layer clean enough that certified partnerships become technically low-friction. The BD conversation is the founders' to have — but if the engineering foundation is solid, that conversation starts from a much stronger position. Product can't create the moat, but it can build the ground the moat sits on.</p>
+    </div>
+    <p class="body-text">If CAD vendors don't move fast on certification, the fallback is a channel deal — their sales teams recommend Aurelian to ECC customers in exchange for referral fees. That's a BD motion, not a product one. But product can support it by making the integration story easy to tell.</p>
+    <div class="strategy-grid">
+      <div class="strategy-card primary"><p class="strat-label a">Strategy A · primary</p><p class="strat-title">Certified integration partner</p><p class="strat-desc">Deep technical integration, formally certified. New customers on that platform deploy in days. Integration work becomes a competitive moat.</p><p class="strat-when">When: CAD vendor sees Aurelian as complementary, not competitive</p></div>
+      <div class="strategy-card"><p class="strat-label b">Strategy B · fallback</p><p class="strat-title">Channel distribution deal</p><p class="strat-desc">CAD vendor's sales team recommends Aurelian to ECC customers. Vendor earns referral fee, Aurelian gets warm inbound. No deep engineering required.</p><p class="strat-when">When: CAD vendor is slow to integrate or considers building their own</p></div>
+    </div>
+  </div>
+  <hr class="divider">
+  <!-- PART 3 -->
+  <div class="section">
+    <p class="section-badge">Product opportunity 03 · 1000 → scale</p>
+    <h2 class="section-title">The procurement problem: where product supports sales</h2>
+    <p class="section-sub">The politics of government buying aren't a product problem — but the artifacts that move each buyer are</p>
+    <p class="body-text">I want to be precise about what product can and can't own here. Buying AI for a 911 center involves five different decision-makers — the ECC director, IT security, the budget committee, the dispatcher union, and county legal. Navigating the politics of that process is a CEO and sales problem. Product shouldn't pretend otherwise.</p>
+    <p class="body-text">But inside that process, there's a specific thing product can build: the artifacts that give each buyer what they need to say yes. Today, these get assembled ad hoc for each deal. If product builds them as standard, ship-on-day-one materials — an ROI dashboard anchored to real deployment data, a security and compliance doc, an emergency escalation report — the sales motion runs without the founders in the room for every step.</p>
+    <div class="insight-box">
+      <p class="insight-label">Product observation</p>
+      <p class="insight-text">Product's role here is narrow but high-leverage: build the artifacts that convert each stakeholder's specific concern into a resolved question. The ROI model for the budget committee. The audit log and escalation report for legal. The dispatcher satisfaction data for the union. These aren't marketing materials — they're product outputs that happen to live in a sales context.</p>
+    </div>
+    <p class="body-text">Click through each stakeholder below. Each buyer needs something different, and the answer to each one is a product artifact — not a sales call.</p>
+    <div class="journey-wrap">
+      <p class="journey-title">The procurement decision chain</p>
+      <p class="journey-sub">Five buyers, five concerns — each one a potential veto</p>
+      <div class="journey-nodes">
+        <div class="jnode active" onclick="showNode(0)"><div class="jnode-icon">EC</div><div class="jnode-label">ECC director</div><div class="jnode-role">Champion</div></div>
+        <div class="jnode-arrow">→</div>
+        <div class="jnode" onclick="showNode(1)"><div class="jnode-icon">IT</div><div class="jnode-label">IT / security</div><div class="jnode-role">Gatekeeper</div></div>
+        <div class="jnode-arrow">→</div>
+        <div class="jnode" onclick="showNode(2)"><div class="jnode-icon">BC</div><div class="jnode-label">Budget committee</div><div class="jnode-role">Approver</div></div>
+        <div class="jnode-arrow">→</div>
+        <div class="jnode" onclick="showNode(3)"><div class="jnode-icon">WU</div><div class="jnode-label">Dispatcher union</div><div class="jnode-role">Blocker risk</div></div>
+        <div class="jnode-arrow">→</div>
+        <div class="jnode" onclick="showNode(4)"><div class="jnode-icon">LG</div><div class="jnode-label">Legal / county</div><div class="jnode-role">Sign-off</div></div>
+      </div>
+      <div class="jdetail" id="jDetail"></div>
+    </div>
+  </div>
+  <hr class="divider">
+  <!-- PART 4 -->
+  <div class="section">
+    <p class="section-badge">Section 04 · Judgment</p>
+    <h2 class="section-title">If I were the first PM: how I'd think about sequencing</h2>
+    <p class="section-sub">Not a conclusion — a decision framework, and an honest invitation to push back</p>
+    <p class="body-text">I want to end with something honest: sequencing these three opportunities isn't a product decision I can make from the outside. It depends on variables only visible from inside — what the pipeline looks like, what commitments already exist with customers, whether engineering can run multiple workstreams in parallel. Both the Call Flow Builder and CAD integration need to happen. The question is whether they can run simultaneously, or whether one needs to go first — and that answer lives in the data I don't have yet.</p>
+    <p class="body-text">Here's the framework I'd use to figure it out in the first 30 days:</p>
+    <div class="p4-grid">
+      <div class="p4-card"><p class="p4-card-label">Variable 01</p><p class="p4-card-title">What does the current pipeline look like?</p><p class="p4-card-body">If the next 20 inbound ECCs are on CentralSquare — already integrated — then Call Flow Builder has immediate ROI. If deals are stalling because of CAD incompatibility, that's a different answer entirely. Pipeline composition determines urgency.</p></div>
+      <div class="p4-card"><p class="p4-card-label">Variable 02</p><p class="p4-card-title">What commitments already exist?</p><p class="p4-card-body">If a customer was promised a 6-week deployment and the team is already stretched, deployment efficiency is urgent now. If a large ECC said "we'll sign when you support Motorola CAD," that single conversation could unlock a deal — and it changes the calculus completely.</p></div>
+      <div class="p4-card"><p class="p4-card-label">Variable 03</p><p class="p4-card-title">Can engineering and BD run in parallel?</p><p class="p4-card-body">CAD certification is a BD and engineering project. Call Flow Builder is a product and engineering project. If the same engineers own both, sequential is the only option. If BD can start vendor conversations while engineering ships the Builder, parallel is possible — and faster.</p></div>
+    </div>
+    <div class="insight-box">
+      <p class="insight-label">What I'd do in month one</p>
+      <p class="insight-text">Sit in on every active sales call, every deployment standup, and every customer check-in. Not to have opinions — to understand which of these three variables is the binding constraint right now. Then make the call. The sequencing decision is easy once you have the inputs. Getting the inputs is the real first job.</p>
+    </div>
+    <p class="body-text">The trade-off either way is the same: prioritizing one means the other waits, and whatever customer or deal is blocked by what you deprioritized is a cost you're knowingly accepting. That cost should be explicit, tracked, and revisited — not forgotten because a decision was made.</p>
+    <p class="body-text">These are my starting observations. I'd genuinely like to know where this matches how you're thinking about it — and where it doesn't. The places we disagree are probably the most interesting ones to talk through.</p>
+    <div class="p4-footer">
+      <p class="p4-footer-text">Three opportunities. Two product levers. One set of questions I'd want to answer before deciding. Happy to talk through any of this — <a href="mailto:zwang9571@gmail.com" style="color:var(--gold);text-decoration:none;">zwang9571@gmail.com</a></p>
+    </div>
+  </div>
+</div>
 
+<footer class="site-footer">
+  <p class="footer-name"><strong>Ziyi Wang</strong> · AI Product Manager</p>
+
+</footer>
+
+<script>
+const flows={
+  noise:{questions:[{text:"What is the exact address or location of the noise?",req:true},{text:"What type of noise — music, party, machinery, or other?",req:true},{text:"Is the noise still ongoing right now?",req:true},{text:"Have you spoken directly with the source?",req:false}],redirects:[{label:"If resolved by Ava",options:["Create CAD log only","Send SMS to caller","No action"]},{label:"If officer needed",options:["Patrol CAD entry","Transfer to dispatcher","Schedule callback"]}],note:"Noise complaint · 4 questions · routes to patrol CAD"},
+  parking:{questions:[{text:"What is the vehicle's location — street address or cross streets?",req:true},{text:"What is the vehicle's make, model, and color?",req:true},{text:"Is the vehicle blocking traffic or a driveway?",req:true},{text:"How long has it been parked there?",req:false}],redirects:[{label:"If resolved by Ava",options:["Create parking CAD log","Send reference number","No action"]},{label:"If officer needed",options:["Parking enforcement CAD","Transfer to dispatcher","Email parking dept"]}],note:"Parking violation · 4 questions · routes to parking CAD"},
+  animal:{questions:[{text:"Where was the animal last seen?",req:true},{text:"What type of animal — dog, cat, or other?",req:true},{text:"Is the animal injured or behaving aggressively?",req:true},{text:"Can you describe the animal's appearance?",req:false}],redirects:[{label:"If resolved by Ava",options:["Log for animal control","Send shelter contact","No action"]},{label:"If response needed",options:["Animal control CAD","Transfer to dispatcher","Schedule callback"]}],note:"Lost animal · 4 questions · routes to animal control"},
+  welfare:{questions:[{text:"What is the address of the person you're concerned about?",req:true},{text:"When did you last have contact with them?",req:true},{text:"Do you believe they are in immediate danger?",req:true},{text:"Any known medical conditions we should know about?",req:false}],redirects:[{label:"If low concern",options:["Log and monitor","Schedule callback","No action"]},{label:"If response needed",options:["Transfer to dispatcher","Patrol CAD entry","EMS notification"]}],note:"Welfare check · 4 questions · routes to dispatcher"},
+  info:{questions:[{text:"What information are you looking for today?",req:true},{text:"Is this related to an existing report or case number?",req:false}],redirects:[{label:"If resolved by Ava",options:["Provide info + close","Send SMS link","No action"]},{label:"If human needed",options:["Transfer to records","Transfer to dispatcher","Schedule callback"]}],note:"General inquiry · 2 questions · routes to records"}
+};
+function selectCallType(el,type){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const f=flows[type];
+  document.getElementById('sopBlock').innerHTML=f.questions.map(q=>`<div class="sop-row"><span class="sop-text">${q.text}</span><span class="${q.req?'badge-req':'badge-opt'}">${q.req?'required':'optional'}</span></div>`).join('');
+  document.getElementById('redirBlock').innerHTML=f.redirects.map(r=>`<div class="redir-row"><span class="redir-label">${r.label}</span><select class="redir-select">${r.options.map((o,i)=>`<option${i===0?' selected':''}>${o}</option>`).join('')}</select></div>`).join('');
+  document.getElementById('footerNote').textContent=f.note;
+}
+const buyers=[
+  {name:"ECC director",tag:"Champion",concern:"Wants to solve the staffing crisis and reduce dispatcher burnout. Already convinced of the value — the challenge is getting approval from everyone above and around them.",artifact:"Customer case studies with hard numbers (calls automated, hours saved, dispatcher satisfaction). Reference contacts at peer ECCs they can call directly."},
+  {name:"IT / security",tag:"Gatekeeper",concern:"Worried about data residency, integration risk to CAD, uptime guarantees, and who's liable if the system goes down during an active incident.",artifact:"SOC 2 report, data residency documentation, SLA terms, architecture diagram showing exactly what data leaves the ECC and where it goes."},
+  {name:"Budget committee",tag:"Approver",concern:"Needs a budget line. $60–72K/year sounds like new spend — unless you frame it against the cost of unfilled dispatcher seats, mandatory overtime, and attrition.",artifact:"One-page ROI model: unfilled seat cost × vacancy rate × automation coverage = payback period. Grand Traverse County contract shows $60K yr1, $72K yr2 — a real data point."},
+  {name:"Dispatcher union",tag:"Blocker risk",concern:"Primary fear: AI is replacing dispatchers. Secondary fear: AI will make a mistake on a real emergency and the human dispatcher gets blamed.",artifact:"Framing that Ava only handles the calls dispatchers hate — parking tickets, noise complaints — while freeing them for real emergencies. Dispatcher satisfaction data from live deployments."},
+  {name:"Legal / county counsel",tag:"Sign-off",concern:"Who is liable if Ava mishandles a call that turns out to be an emergency? What does the contract say? Is the vendor insured?",artifact:"Contract liability language, indemnification terms, evidence of emergency escalation rate and accuracy. Insurance coverage documentation."}
+];
+function showNode(i){
+  document.querySelectorAll('.jnode').forEach((n,idx)=>n.classList.toggle('active',idx===i));
+  const b=buyers[i];
+  document.getElementById('jDetail').innerHTML=`<div class="jd-top"><span class="jd-name">${b.name}</span><span class="jd-tag">${b.tag}</span></div><p class="jd-concern-label">Their concern</p><p class="jd-concern">${b.concern}</p><p class="jd-artifact-label">What Aurelian needs to give them</p><p class="jd-artifact">${b.artifact}</p>`;
+}
+// init
+selectCallType(document.querySelector('.chip.active'),'noise');
+showNode(0);
+</script>
+</body>
+</html>
