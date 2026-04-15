@@ -220,9 +220,9 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-primary)
     
         <div class="cfb-step">
           <p class="step-label"><span class="step-num">2</span> SOP logic — inherited + local overrides</p>
-          <div class="body-text" style="font-size:12px;margin-bottom:.75rem;color:var(--text-muted);">
+          <div class="body-text" id="inheritanceNote" style="font-size:12px;margin-bottom:.75rem;color:var(--text-muted);">
             Inherited from baseline: <span style="color:var(--text-primary)">78%</span> · Local overrides: <span style="color:var(--text-primary)">22%</span>
-          </div>
+          </div>    
           <div class="sop-block" id="sopBlock"></div>
         </div>
     
@@ -243,6 +243,10 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-primary)
             <div class="sop-row">
               <span class="sop-text">Supervisor review required before publish</span>
               <span class="badge-opt">review</span>
+            </div>
+            <div class="sop-row">
+              <span class="sop-text">Status: Draft — awaiting local validation</span>
+              <span class="badge-opt">draft</span>
             </div>
             <div class="sop-row">
               <span class="sop-text">CAD mapping, model tuning, and regional transcription are handled separately</span>
@@ -381,6 +385,7 @@ const flows = {
       { label: "Non-urgent path", options: ["Create patrol CAD log", "Send caller guidance", "Queue callback review"] },
       { label: "If active disturbance escalates", options: ["Transfer to dispatcher", "Patrol CAD entry", "Supervisor review"] }
     ],
+    inheritance: 'Inherited from baseline: <span style="color:var(--text-primary)">78%</span> · Local overrides: <span style="color:var(--text-primary)">22%</span>',
     note: "Noise complaint · 78% inherited · 22% local override · patrol CAD"
   },
   parking: {
@@ -394,6 +399,7 @@ const flows = {
       { label: "Standard handling", options: ["Create parking CAD log", "Send reference number", "Queue non-urgent review"] },
       { label: "If safety impact is detected", options: ["Transfer to dispatcher", "Parking enforcement CAD", "Supervisor review"] }
     ],
+    inheritance: 'Inherited from baseline: <span style="color:var(--text-primary)">82%</span> · Local overrides: <span style="color:var(--text-primary)">18%</span>',
     note: "Parking violation · 82% inherited · 18% local override · parking CAD"
   },
   animal: {
@@ -407,6 +413,7 @@ const flows = {
       { label: "Standard handling", options: ["Log for animal control", "Send shelter contact", "Queue callback review"] },
       { label: "If escalation is needed", options: ["Animal control CAD", "Transfer to dispatcher", "Supervisor review"] }
     ],
+    inheritance: 'Inherited from baseline: <span style="color:var(--text-primary)">76%</span> · Local overrides: <span style="color:var(--text-primary)">24%</span>',
     note: "Lost animal · 76% inherited · 24% local override · animal control"
   },
   welfare: {
@@ -420,6 +427,7 @@ const flows = {
       { label: "If concern is low", options: ["Log and monitor", "Schedule callback", "Supervisor review"] },
       { label: "If concern rises", options: ["Transfer to dispatcher", "Patrol CAD entry", "EMS notification"] }
     ],
+    inheritance: 'Inherited from baseline: <span style="color:var(--text-primary)">71%</span> · Local overrides: <span style="color:var(--text-primary)">29%</span>',
     note: "Welfare check · 71% inherited · 29% local override · dispatcher review"
   },
   info: {
@@ -431,6 +439,7 @@ const flows = {
       { label: "Standard handling", options: ["Provide info + close", "Send SMS link", "Queue callback review"] },
       { label: "If human support is needed", options: ["Transfer to records", "Transfer to dispatcher", "Supervisor review"] }
     ],
+    inheritance: 'Inherited from baseline: <span style="color:var(--text-primary)">88%</span> · Local overrides: <span style="color:var(--text-primary)">12%</span>',
     note: "General inquiry · 88% inherited · 12% local override · records"
   }
 };
@@ -447,7 +456,7 @@ function selectCallType(el, type) {
   document.getElementById('redirBlock').innerHTML = f.redirects
     .map(r => `<div class="redir-row"><span class="redir-label">${r.label}</span><select class="redir-select">${r.options.map((o, i) => `<option${i === 0 ? ' selected' : ''}>${o}</option>`).join('')}</select></div>`)
     .join('');
-
+  document.getElementById('inheritanceNote').innerHTML = f.inheritance;
   document.getElementById('footerNote').textContent = f.note;
 }
 const buyers=[
