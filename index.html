@@ -196,35 +196,68 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-primary)
     <p class="body-text"> The prototype below models what a guided configuration layer might look like — starting from Aurelian's own team's perspective, not the customer's.</p>
     <div class="cfb">
       <div class="cfb-header">
-        <div><p class="cfb-title">Call Flow Builder</p><p class="cfb-subtitle">Configure how Ava handles each non-emergency call type</p></div>
-        <span class="proto-badge">prototype</span>
+        <div>
+          <p class="cfb-title">Call Flow Configuration Workspace</p>
+          <p class="cfb-subtitle">A guided layer for translating local SOPs into repeatable call logic</p>
+        </div>
+        <span class="proto-badge">internal-first prototype</span>
       </div>
+    
       <div class="cfb-body">
         <div class="cfb-step">
-          <p class="step-label"><span class="step-num">1</span> Select call type</p>
+          <p class="step-label"><span class="step-num">1</span> Workflow source</p>
           <div class="call-chips">
-            <div class="chip active" onclick="selectCallType(this,'noise')">Noise complaint</div>
-            <div class="chip" onclick="selectCallType(this,'parking')">Parking violation</div>
-            <div class="chip" onclick="selectCallType(this,'animal')">Lost animal</div>
-            <div class="chip" onclick="selectCallType(this,'welfare')">Welfare check</div>
-            <div class="chip" onclick="selectCallType(this,'info')">General inquiry</div>
-            <div class="chip-add">+ Add type</div>
+            <div class="chip active" onclick="selectCallType(this,'noise')">Noise complaint baseline</div>
+            <div class="chip" onclick="selectCallType(this,'parking')">Parking violation baseline</div>
+            <div class="chip" onclick="selectCallType(this,'animal')">Lost animal baseline</div>
+            <div class="chip" onclick="selectCallType(this,'welfare')">Welfare check baseline</div>
+            <div class="chip" onclick="selectCallType(this,'info')">General inquiry baseline</div>
+            <div class="chip-add">+ New local variant</div>
           </div>
         </div>
+    
         <div class="conn"></div>
+    
         <div class="cfb-step">
-          <p class="step-label"><span class="step-num">2</span> SOP — questions Ava will ask</p>
+          <p class="step-label"><span class="step-num">2</span> SOP logic — inherited + local overrides</p>
+          <div class="body-text" style="font-size:12px;margin-bottom:.75rem;color:var(--text-muted);">
+            Inherited from baseline: <span style="color:var(--text-primary)">78%</span> · Local overrides: <span style="color:var(--text-primary)">22%</span>
+          </div>
           <div class="sop-block" id="sopBlock"></div>
         </div>
+    
         <div class="conn"></div>
+    
         <div class="cfb-step">
-          <p class="step-label"><span class="step-num">3</span> Redirect — where does this call go?</p>
+          <p class="step-label"><span class="step-num">3</span> Routing + safeguards</p>
           <div class="redirect-rows" id="redirBlock"></div>
         </div>
+    
+        <div class="cfb-step" style="margin-top:1.25rem;">
+          <p class="step-label"><span class="step-num">4</span> Validation + review</p>
+          <div class="sop-block">
+            <div class="sop-row">
+              <span class="sop-text">Protected categories must always route to a live dispatcher</span>
+              <span class="badge-req">locked</span>
+            </div>
+            <div class="sop-row">
+              <span class="sop-text">Supervisor review required before publish</span>
+              <span class="badge-opt">review</span>
+            </div>
+            <div class="sop-row">
+              <span class="sop-text">CAD mapping, model tuning, and regional transcription are handled separately</span>
+              <span class="badge-opt">outside scope</span>
+            </div>
+          </div>
+        </div>
       </div>
+    
       <div class="cfb-footer">
-        <p class="footer-note" id="footerNote">Noise complaint · 4 questions · routes to patrol CAD</p>
-        <button class="save-btn">Save flow</button>
+        <p class="footer-note" id="footerNote">Noise complaint · 78% inherited · 22% local override · patrol CAD</p>
+        <div style="display:flex;gap:8px;">
+          <button class="save-btn">Save draft</button>
+          <button class="save-btn">Send for review</button>
+        </div>
       </div>
     </div>
   </div>
@@ -336,20 +369,86 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-primary)
 </footer>
 
 <script>
-const flows={
-  noise:{questions:[{text:"What is the exact address or location of the noise?",req:true},{text:"What type of noise — music, party, machinery, or other?",req:true},{text:"Is the noise still ongoing right now?",req:true},{text:"Have you spoken directly with the source?",req:false}],redirects:[{label:"If resolved by Ava",options:["Create CAD log only","Send SMS to caller","No action"]},{label:"If officer needed",options:["Patrol CAD entry","Transfer to dispatcher","Schedule callback"]}],note:"Noise complaint · 4 questions · routes to patrol CAD"},
-  parking:{questions:[{text:"What is the vehicle's location — street address or cross streets?",req:true},{text:"What is the vehicle's make, model, and color?",req:true},{text:"Is the vehicle blocking traffic or a driveway?",req:true},{text:"How long has it been parked there?",req:false}],redirects:[{label:"If resolved by Ava",options:["Create parking CAD log","Send reference number","No action"]},{label:"If officer needed",options:["Parking enforcement CAD","Transfer to dispatcher","Email parking dept"]}],note:"Parking violation · 4 questions · routes to parking CAD"},
-  animal:{questions:[{text:"Where was the animal last seen?",req:true},{text:"What type of animal — dog, cat, or other?",req:true},{text:"Is the animal injured or behaving aggressively?",req:true},{text:"Can you describe the animal's appearance?",req:false}],redirects:[{label:"If resolved by Ava",options:["Log for animal control","Send shelter contact","No action"]},{label:"If response needed",options:["Animal control CAD","Transfer to dispatcher","Schedule callback"]}],note:"Lost animal · 4 questions · routes to animal control"},
-  welfare:{questions:[{text:"What is the address of the person you're concerned about?",req:true},{text:"When did you last have contact with them?",req:true},{text:"Do you believe they are in immediate danger?",req:true},{text:"Any known medical conditions we should know about?",req:false}],redirects:[{label:"If low concern",options:["Log and monitor","Schedule callback","No action"]},{label:"If response needed",options:["Transfer to dispatcher","Patrol CAD entry","EMS notification"]}],note:"Welfare check · 4 questions · routes to dispatcher"},
-  info:{questions:[{text:"What information are you looking for today?",req:true},{text:"Is this related to an existing report or case number?",req:false}],redirects:[{label:"If resolved by Ava",options:["Provide info + close","Send SMS link","No action"]},{label:"If human needed",options:["Transfer to records","Transfer to dispatcher","Schedule callback"]}],note:"General inquiry · 2 questions · routes to records"}
+const flows = {
+  noise: {
+    questions: [
+      { text: "Confirm the exact address or nearest intersection.", req: true },
+      { text: "Classify the noise source — music, party, machinery, or other.", req: true },
+      { text: "Confirm whether the disturbance is active right now.", req: true },
+      { text: "Capture any local escalation rule or quiet-hours override.", req: false }
+    ],
+    redirects: [
+      { label: "Non-urgent path", options: ["Create patrol CAD log", "Send caller guidance", "Queue callback review"] },
+      { label: "If active disturbance escalates", options: ["Transfer to dispatcher", "Patrol CAD entry", "Supervisor review"] }
+    ],
+    note: "Noise complaint · 78% inherited · 22% local override · patrol CAD"
+  },
+  parking: {
+    questions: [
+      { text: "Confirm vehicle location and nearby cross streets.", req: true },
+      { text: "Capture make, model, color, and plate if available.", req: true },
+      { text: "Determine whether traffic, driveway access, or safety is blocked.", req: true },
+      { text: "Apply any local parking-enforcement override.", req: false }
+    ],
+    redirects: [
+      { label: "Standard handling", options: ["Create parking CAD log", "Send reference number", "Queue non-urgent review"] },
+      { label: "If safety impact is detected", options: ["Transfer to dispatcher", "Parking enforcement CAD", "Supervisor review"] }
+    ],
+    note: "Parking violation · 82% inherited · 18% local override · parking CAD"
+  },
+  animal: {
+    questions: [
+      { text: "Confirm where the animal was last seen.", req: true },
+      { text: "Classify animal type and reported behavior.", req: true },
+      { text: "Determine whether injury or aggression is present.", req: true },
+      { text: "Apply any local animal-control escalation rule.", req: false }
+    ],
+    redirects: [
+      { label: "Standard handling", options: ["Log for animal control", "Send shelter contact", "Queue callback review"] },
+      { label: "If escalation is needed", options: ["Animal control CAD", "Transfer to dispatcher", "Supervisor review"] }
+    ],
+    note: "Lost animal · 76% inherited · 24% local override · animal control"
+  },
+  welfare: {
+    questions: [
+      { text: "Confirm the subject's address and recent contact status.", req: true },
+      { text: "Determine whether there is immediate danger.", req: true },
+      { text: "Capture any known medical or vulnerability indicators.", req: true },
+      { text: "Apply local welfare-check escalation guidance.", req: false }
+    ],
+    redirects: [
+      { label: "If concern is low", options: ["Log and monitor", "Schedule callback", "Supervisor review"] },
+      { label: "If concern rises", options: ["Transfer to dispatcher", "Patrol CAD entry", "EMS notification"] }
+    ],
+    note: "Welfare check · 71% inherited · 29% local override · dispatcher review"
+  },
+  info: {
+    questions: [
+      { text: "Classify the information being requested.", req: true },
+      { text: "Check whether a case number or prior report exists.", req: false }
+    ],
+    redirects: [
+      { label: "Standard handling", options: ["Provide info + close", "Send SMS link", "Queue callback review"] },
+      { label: "If human support is needed", options: ["Transfer to records", "Transfer to dispatcher", "Supervisor review"] }
+    ],
+    note: "General inquiry · 88% inherited · 12% local override · records"
+  }
 };
-function selectCallType(el,type){
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+
+function selectCallType(el, type) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  const f=flows[type];
-  document.getElementById('sopBlock').innerHTML=f.questions.map(q=>`<div class="sop-row"><span class="sop-text">${q.text}</span><span class="${q.req?'badge-req':'badge-opt'}">${q.req?'required':'optional'}</span></div>`).join('');
-  document.getElementById('redirBlock').innerHTML=f.redirects.map(r=>`<div class="redir-row"><span class="redir-label">${r.label}</span><select class="redir-select">${r.options.map((o,i)=>`<option${i===0?' selected':''}>${o}</option>`).join('')}</select></div>`).join('');
-  document.getElementById('footerNote').textContent=f.note;
+  const f = flows[type];
+
+  document.getElementById('sopBlock').innerHTML = f.questions
+    .map(q => `<div class="sop-row"><span class="sop-text">${q.text}</span><span class="${q.req ? 'badge-req' : 'badge-opt'}">${q.req ? 'required' : 'override'}</span></div>`)
+    .join('');
+
+  document.getElementById('redirBlock').innerHTML = f.redirects
+    .map(r => `<div class="redir-row"><span class="redir-label">${r.label}</span><select class="redir-select">${r.options.map((o, i) => `<option${i === 0 ? ' selected' : ''}>${o}</option>`).join('')}</select></div>`)
+    .join('');
+
+  document.getElementById('footerNote').textContent = f.note;
 }
 const buyers=[
   {name:"ECC director",tag:"Champion",concern:"Wants to solve the staffing crisis and reduce dispatcher burnout. Already convinced of the value — the challenge is getting approval from everyone above and around them.",artifact:"Customer case studies with hard numbers (calls automated, hours saved, dispatcher satisfaction). Reference contacts at peer ECCs they can call directly."},
